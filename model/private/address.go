@@ -1,4 +1,4 @@
-package model
+package private
 
 type Address struct {
 	ID      int
@@ -6,11 +6,4 @@ type Address struct {
 	City    string
 	Postal  string
 	Country string
-}
-
-type Person struct {
-	ID      int
-	Name    string
-	Email   string
-	Address Address
 }

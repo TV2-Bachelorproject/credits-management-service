@@ -1,4 +1,4 @@
-package model
+package public
 
 type Season struct {
 	ID       int

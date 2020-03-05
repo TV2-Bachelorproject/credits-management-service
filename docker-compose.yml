@@ -1,6 +1,20 @@
-version: '3'
+version: '3.1'
 services:
   web:
     build: .
+    environment:
+      DB_PASSWORD: root
     ports:
       - 3000:3000
+    links:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: root
+    ports:
+      - 5432:5432

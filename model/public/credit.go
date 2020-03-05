@@ -1,4 +1,4 @@
-package model
+package public
 
 type CreditGroup struct {
 	ID    int

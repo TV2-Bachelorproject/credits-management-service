@@ -1,4 +1,4 @@
-package model
+package public
 
 type Program struct {
 	ID      int
