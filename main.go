@@ -13,9 +13,9 @@ import (
 )
 
 func routes(r *mux.Router) {
-	r.HandleFunc("/", controller.Hello)
-	r.HandleFunc("/people", controller.People)
-	r.HandleFunc("/people/{id:[0-9]+}", controller.Person)
+	r.HandleFunc("/", controller.Hello).Methods("GET")
+	r.HandleFunc("/people", controller.People).Methods("GET")
+	r.HandleFunc("/people/{id:[0-9]+}", controller.Person).Methods("GET")
 }
 
 func main() {

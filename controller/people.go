@@ -21,6 +21,6 @@ func Person(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person := public.Person{}.Find(uint(id))
+	person := public.Person{}.Find(id)
 	response.JSON(w, person)
 }
