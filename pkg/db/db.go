@@ -1,8 +1,9 @@
 package db
 
 import (
+	"flag"
+
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 var (
@@ -28,8 +29,12 @@ var (
 	Raw           func(string, ...interface{}) *gorm.DB
 )
 
+func init() {
+	Setup()
+}
+
 func Setup() error {
-	db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=root dbname=root password=root sslmode=disable")
+	db, err := connect()
 
 	if err != nil {
 		return err
@@ -65,6 +70,18 @@ func Migrate(tables ...interface{}) {
 	}
 
 	conn.AutoMigrate(tables...)
+}
+
+func Reset(tables ...interface{}) {
+	if conn == nil {
+		return
+	}
+
+	if flag.Lookup("test.v") == nil {
+		return // should only be able to reset db in test env
+	}
+
+	conn.DropTableIfExists(tables...)
 }
 
 func Close() error {

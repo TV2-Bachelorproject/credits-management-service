@@ -1,6 +1,7 @@
 package request
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,6 +10,7 @@ import (
 
 func GetID(r *http.Request) (uint, error) {
 	vars := mux.Vars(r)
+	fmt.Println(r)
 	id, err := strconv.ParseUint(vars["id"], 10, 64)
 
 	if err != nil {
