@@ -12,6 +12,14 @@ type Program struct {
 	SeasonID uint
 }
 
-func Programs() *gorm.DB {
-	return db.Model(&Program{})
+func (p Program) Find(id uint) Program {
+	db.Model(p).Where("id = ?", id).First(&p)
+	return p
+}
+
+type Programs []Program
+
+func (p Programs) Find() Programs {
+	db.Model(&Program{}).Find(&p)
+	return p
 }

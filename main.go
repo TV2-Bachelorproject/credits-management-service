@@ -14,7 +14,8 @@ import (
 
 func routes(r *mux.Router) {
 	r.HandleFunc("/", controller.Hello)
-	r.HandleFunc("/programs", controller.Programs)
+	r.HandleFunc("/people", controller.People)
+	r.HandleFunc("/people/{id:[0-9]+}", controller.Person)
 }
 
 func main() {

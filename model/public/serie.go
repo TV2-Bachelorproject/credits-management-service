@@ -11,6 +11,14 @@ type Serie struct {
 	Seasons []Season
 }
 
-func Series() *gorm.DB {
-	return db.Model(&Serie{})
+func (s Serie) Find(id uint) Serie {
+	db.Model(s).Where("id = ?", id).First(&s)
+	return s
+}
+
+type Series []Serie
+
+func (s Series) Find() Series {
+	db.Model(&Serie{}).Find(&s)
+	return s
 }

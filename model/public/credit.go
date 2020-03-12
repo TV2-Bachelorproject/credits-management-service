@@ -17,6 +17,14 @@ type Credit struct {
 	ProgramID   uint
 }
 
-func Credits() *gorm.DB {
-	return db.Model(&Credit{})
+func (s Credit) Find(id uint) Credit {
+	db.Model(s).Where("id = ?", id).First(&s)
+	return s
+}
+
+type Credits []Credit
+
+func (s Credits) Find() Credits {
+	db.Model(&Credit{}).Find(&s)
+	return s
 }

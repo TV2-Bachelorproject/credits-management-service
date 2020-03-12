@@ -12,6 +12,14 @@ type Person struct {
 	Address
 }
 
-func People() *gorm.DB {
-	return db.Model(&Person{})
+func (s Person) Find(id uint) Person {
+	db.Model(s).Where("id = ?", id).First(&s)
+	return s
+}
+
+type People []Person
+
+func (s People) Find() People {
+	db.Model(&Person{}).Find(&s)
+	return s
 }
