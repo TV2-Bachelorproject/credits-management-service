@@ -1,12 +1,22 @@
 package public
 
+import (
+	"github.com/TV2-Bachelorproject/server/pkg/db"
+	"github.com/jinzhu/gorm"
+)
+
 type CreditGroup struct {
-	ID    int
-	Title string
+	gorm.Model
+	Name string
 }
 
 type Credit struct {
-	ID      int
-	Persons []Person
-	Group   CreditGroup
+	gorm.Model
+	Persons     []Person
+	CreditGroup CreditGroup
+	ProgramID   uint
+}
+
+func Credits() *gorm.DB {
+	return db.Model(&Credit{})
 }

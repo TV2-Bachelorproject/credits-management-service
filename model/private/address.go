@@ -1,8 +1,7 @@
 package private
 
 type Address struct {
-	ID      int
-	Lines   []string
+	Address string
 	City    string
 	Postal  string
 	Country string

@@ -1,8 +1,17 @@
 package public
 
+import (
+	"github.com/TV2-Bachelorproject/server/pkg/db"
+	"github.com/jinzhu/gorm"
+)
+
 type Season struct {
-	ID       int
+	gorm.Model
 	Title    string
 	Programs []Program
-	Credits  []Credit
+	SerieID  uint
+}
+
+func Seasons() *gorm.DB {
+	return db.Model(&Season{})
 }
