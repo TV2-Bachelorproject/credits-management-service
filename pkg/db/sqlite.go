@@ -1,9 +1,11 @@
-// +build local
+// +build sqlite
 
 package db
 
 import (
 	"github.com/jinzhu/gorm"
+
+	// import the sqlite dialect for gorm
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 

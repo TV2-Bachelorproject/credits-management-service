@@ -4,16 +4,18 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/TV2-Bachelorproject/server/controller"
+	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/model"
 	"github.com/gorilla/mux"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func routes(r *mux.Router) {
-	r.HandleFunc("/", controller.Hello).Methods("GET")
-	r.HandleFunc("/people", controller.People).Methods("GET")
-	r.HandleFunc("/people/{id:[0-9]+}", controller.Person).Methods("GET")
+	r.HandleFunc("/people", people.List).Methods("GET")
+	r.HandleFunc("/people", people.Create).Methods("POST")
+	r.HandleFunc("/people/{id:[0-9]+}", people.Show).Methods("GET")
+	r.HandleFunc("/people/{id:[0-9]+}", people.Update).Methods("PUT")
+	r.HandleFunc("/people/{id:[0-9]+}", people.Delete).Methods("DELETE")
 }
 
 func main() {
