@@ -1,4 +1,4 @@
-// +build testing
+// +build local
 
 package db
 

@@ -2,6 +2,7 @@ package db
 
 import (
 	"flag"
+	"log"
 
 	"github.com/jinzhu/gorm"
 )
@@ -65,6 +66,10 @@ func Setup() error {
 }
 
 func Migrate(tables ...interface{}) {
+	if conn == nil {
+		log.Fatal("could not connect to database; if testing locally use: go test -tags local ./...")
+	}
+
 	conn.AutoMigrate(tables...)
 }
 
