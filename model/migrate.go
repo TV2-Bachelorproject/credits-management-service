@@ -12,6 +12,7 @@ var tables = []interface{}{
 	&public.Genre{},
 	&public.Credit{},
 	&public.CreditGroup{},
+	&public.Production{},
 	&public.Program{},
 	&public.Season{},
 	&public.Serie{},

@@ -21,6 +21,8 @@ type Program struct {
 	LinearEpisodeNumber int
 	ProductionID        uint
 	Production          Production
+	SerieID             uint
+	Serie               Serie
 	AirtimeFrom         int `gorm:"type:bigint"`
 	AirtimeTo           int `gorm:"type:bigint"`
 }
