@@ -9,21 +9,20 @@ type Program struct {
 	gorm.Model
 	ProgramID           string `json:"programId"`
 	Title               string
-	OriginalTitle       string
-	EpisodeTite         string
 	Teaser              string
 	Description         string
 	Cast                string
 	CategoryID          uint
-	Category            Category `gorm:"foreignkey:category_id"`
-	Genres              []Genre  `gorm:"many2many:genre_programs;"`
+	Category            Category
+	Genres              []Genre `gorm:"many2many:genre_programs;"`
 	SeasonID            uint
-	Season              Season `gorm:"foreignkey:season_id"`
-	SeasonEpisodeNumber string
+	Season              Season
+	SeasonEpisodeNumber int
+	LinearEpisodeNumber int
 	ProductionID        uint
-	Production          Production `gorm:"foreignkey:production_id"`
-	AirtimeFrom         int        `gorm:"type:bigint"`
-	AirtimeTo           int        `gorm:"type:bigint"`
+	Production          Production
+	AirtimeFrom         int `gorm:"type:bigint"`
+	AirtimeTo           int `gorm:"type:bigint"`
 }
 
 func (p Program) Find(id uint) Program {

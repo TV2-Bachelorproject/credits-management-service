@@ -11,6 +11,7 @@ type Season struct {
 	RawSeasonID string `gorm:"type:varchar(100)"`
 	Programs    []Program
 	SerieID     uint
+	Serie       Serie
 }
 
 func (s Season) Find(id uint) Season {
