@@ -8,17 +8,17 @@ import (
 type Person struct {
 	gorm.Model
 	Name    string
-	Credits []Credit
+	Credits []Credit `gorm:"many2many:person_credits;"`
 }
 
-func (s Person) Find(id uint) Person {
-	db.Model(s).Where("id = ?", id).First(&s)
-	return s
+func (p Person) Find(id uint) Person {
+	db.Model(p).Where("id = ?", id).First(&p)
+	return p
 }
 
 type People []Person
 
-func (s People) Find() People {
-	db.Model(&Person{}).Find(&s)
-	return s
+func (p People) Find() People {
+	db.Model(&Person{}).Find(&p)
+	return p
 }

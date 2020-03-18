@@ -7,9 +7,10 @@ import (
 
 type Season struct {
 	gorm.Model
-	Title    string
-	Programs []Program
-	SerieID  uint
+	Title       string
+	RawSeasonID string `gorm:"type:varchar(100)"`
+	Programs    []Program
+	SerieID     uint
 }
 
 func (s Season) Find(id uint) Season {

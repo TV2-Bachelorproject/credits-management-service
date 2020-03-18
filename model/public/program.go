@@ -3,29 +3,27 @@ package public
 import (
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/jinzhu/gorm"
-	"github.com/lib/pq"
 )
 
 type Program struct {
 	gorm.Model
-	ProgramID           string `json:"programId" gorm:"primary_key"`
+	ProgramID           string `json:"programId"`
 	Title               string
 	OriginalTitle       string
+	EpisodeTite         string
 	Teaser              string
 	Description         string
 	Cast                string
-	Category            string
-	Genres              pq.StringArray `gorm:"type:varchar(100)[]"`
-	SeasonID            string         `gorm:"type:varchar(100)"`
+	CategoryID          uint
+	Category            Category `gorm:"foreignkey:category_id"`
+	Genres              []Genre  `gorm:"many2many:genre_programs;"`
+	SeasonID            uint
+	Season              Season `gorm:"foreignkey:season_id"`
 	SeasonEpisodeNumber string
-	ProductionID        int
+	ProductionID        uint
 	Production          Production `gorm:"foreignkey:production_id"`
 	AirtimeFrom         int        `gorm:"type:bigint"`
 	AirtimeTo           int        `gorm:"type:bigint"`
-	Airtime             struct {
-		From int `gorm:"-"`
-		To   int `gorm:"-"`
-	}
 }
 
 func (p Program) Find(id uint) Program {

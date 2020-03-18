@@ -65,10 +65,6 @@ func Setup() error {
 }
 
 func Migrate(tables ...interface{}) {
-	if conn == nil {
-		return
-	}
-
 	conn.AutoMigrate(tables...)
 }
 
