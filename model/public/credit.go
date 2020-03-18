@@ -12,7 +12,7 @@ type CreditGroup struct {
 
 type Credit struct {
 	gorm.Model
-	Persons     []Person
+	Persons     []Person `gorm:"many2many:person_credits;"`
 	CreditGroup CreditGroup
 	ProgramID   uint
 }
