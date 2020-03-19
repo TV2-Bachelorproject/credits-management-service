@@ -26,12 +26,7 @@ func TestListPeople(t *testing.T) {
 		db.Create(&expected[i])
 	}
 
-	r, err := http.NewRequest("GET", "/people", nil)
-
-	if err != nil {
-		t.Error(err)
-	}
-
+	r := httptest.NewRequest("GET", "/people", nil)
 	w := httptest.NewRecorder()
 
 	List(w, r)
