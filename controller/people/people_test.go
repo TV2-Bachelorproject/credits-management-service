@@ -9,7 +9,6 @@ import (
 
 	"github.com/TV2-Bachelorproject/server/model"
 	"github.com/TV2-Bachelorproject/server/model/private"
-	"github.com/TV2-Bachelorproject/server/model/public"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/gorilla/mux"
 )
@@ -18,9 +17,9 @@ func TestListPeople(t *testing.T) {
 	model.Migrate()
 	defer model.Reset()
 
-	expected := []public.Person{
-		public.Person{Name: "John Doe"},
-		public.Person{Name: "Jane Doe"},
+	expected := []private.Person{
+		private.Person{Name: "John Doe"},
+		private.Person{Name: "Jane Doe"},
 	}
 
 	for i := range expected {
@@ -41,7 +40,7 @@ func TestListPeople(t *testing.T) {
 		t.Errorf("expected status code 200; got %d", w.Code)
 	}
 
-	results := []public.Person{}
+	results := []private.Person{}
 
 	json.Unmarshal(w.Body.Bytes(), &results)
 
@@ -64,7 +63,7 @@ func TestShowPerson(t *testing.T) {
 	model.Migrate()
 	defer model.Reset()
 
-	expected := public.Person{Name: "John Doe"}
+	expected := private.Person{Name: "John Doe"}
 	db.Create(&expected)
 
 	r := httptest.NewRequest("GET", "/people/1", nil)
@@ -80,7 +79,7 @@ func TestShowPerson(t *testing.T) {
 		t.Errorf("expected status code 200; got %d", w.Code)
 	}
 
-	result := public.Person{}
+	result := private.Person{}
 	json.Unmarshal(w.Body.Bytes(), &result)
 
 	if expected.Name != result.Name {
