@@ -25,6 +25,7 @@ type Program struct {
 	Serie               Serie
 	AirtimeFrom         int `gorm:"type:bigint"`
 	AirtimeTo           int `gorm:"type:bigint"`
+	Credit              []Credits
 }
 
 func (p Program) Find(id uint) Program {
