@@ -24,11 +24,11 @@ var tables = []interface{}{
 }
 
 func Migrate() {
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
 	db.Migrate(tables...)
 }
 
 func Reset() {
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
 	db.Reset(tables...)
 }
