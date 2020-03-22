@@ -42,6 +42,31 @@ func Authenticated(types ...user.Type) mux.MiddlewareFunc {
 				return
 			}
 
+			u := user.Find(claims.ID)
+
+			if u.ID == 0 {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+
+			if u.Token != token {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+
+			var allowedType bool
+			for _, t := range types {
+				if t == u.Type {
+					allowedType = true
+					break
+				}
+			}
+
+			if !allowedType {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+
 			next.ServeHTTP(w, r)
 		})
 	}

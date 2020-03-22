@@ -19,14 +19,14 @@ func TestUserVerification(t *testing.T) {
 	db.Create(&user)
 
 	// invalid email
-	_, err = Authorize("daslgkj", "123456")
+	_, err = Authorize("john@example", "123456")
 
 	if err == nil {
 		t.Errorf("authorized user with an invalid email")
 	}
 
 	// test invalid password
-	_, err = Authorize("john@example", "3241lgajsdg")
+	_, err = Authorize("john@example.com", "")
 
 	if err == nil {
 		t.Errorf("authorized user with an invalid password")

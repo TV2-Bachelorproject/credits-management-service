@@ -1,19 +1,19 @@
-package people
+package users
 
 import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/TV2-Bachelorproject/server/model/private"
+	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/TV2-Bachelorproject/server/pkg/request"
 	"github.com/TV2-Bachelorproject/server/pkg/response"
 )
 
 func List(w http.ResponseWriter, r *http.Request) {
-	people := private.People{}.Find()
-	response.JSON(w, people)
+	users := user.All()
+	response.JSON(w, users)
 }
 
 func Show(w http.ResponseWriter, r *http.Request) {
@@ -24,18 +24,18 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person := private.Person{}.Find(id)
+	u := user.Find(id)
 
-	if person.ID == 0 {
-		http.Error(w, "Person not found", http.StatusNotFound)
+	if u.ID == 0 {
+		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
 
-	response.JSON(w, person)
+	response.JSON(w, u)
 }
 
 func Create(w http.ResponseWriter, r *http.Request) {
-	person := private.Person{}
+	u := user.User{}
 
 	b, err := ioutil.ReadAll(r.Body)
 
@@ -44,18 +44,25 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := json.Unmarshal(b, &person); err != nil {
+	if err := json.Unmarshal(b, &u); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	if errs := person.Invalid(); len(errs) > 0 {
+	u, err = user.New(u.Name, u.Email, u.Password, u.Type)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if errs := u.Invalid(); len(errs) > 0 {
 		http.Error(w, errs.Error(), http.StatusBadRequest)
 		return
 	}
 
-	db.Create(&person)
+	db.Create(&u)
 
-	response.JSON(w, person)
+	response.JSON(w, u)
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
@@ -73,25 +80,25 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person := private.Person{}.Find(id)
+	user := user.Find(id)
 
-	if err := json.Unmarshal(b, &person); err != nil {
+	if err := json.Unmarshal(b, &user); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	if errs := person.Invalid(); len(errs) > 0 {
+	if errs := user.Invalid(); len(errs) > 0 {
 		http.Error(w, errs.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if person.ID != id {
+	if user.ID != id {
 		http.Error(w, "not possible to update the id", http.StatusBadRequest)
 		return
 	}
 
-	db.Save(&person)
+	db.Save(&user)
 
-	response.JSON(w, person)
+	response.JSON(w, user)
 }
 
 func Delete(w http.ResponseWriter, r *http.Request) {
@@ -101,8 +108,8 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	person := private.Person{}.Find(id)
-	db.Delete(person)
+	user := user.Find(id)
+	db.Delete(user)
 
-	response.JSON(w, person)
+	response.JSON(w, user)
 }
