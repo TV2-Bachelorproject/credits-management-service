@@ -16,9 +16,9 @@ import (
 
 func routes(r *mux.Router) {
 	u := mux.NewRouter()
+	u.Use(middleware.Authenticated(user.Admin))
 	r.Handle("/users", u)
 	r.Handle("/users/{id:[0-9]+}", u)
-	u.Use(middleware.Authenticated(user.Admin))
 	u.HandleFunc("/users", users.List).Methods("GET")
 	u.HandleFunc("/users", users.Create).Methods("POST")
 	u.HandleFunc("/users/{id:[0-9]+}", users.Show).Methods("GET")
@@ -26,9 +26,9 @@ func routes(r *mux.Router) {
 	u.HandleFunc("/users/{id:[0-9]+}", users.Delete).Methods("DELETE")
 
 	p := mux.NewRouter()
+	p.Use(middleware.Authenticated(user.Admin, user.Producer))
 	r.Handle("/people", p)
 	r.Handle("/people/{id:[0-9]+}", p)
-	p.Use(middleware.Authenticated(user.Admin, user.Producer))
 	p.HandleFunc("/people", people.List).Methods("GET")
 	p.HandleFunc("/people", people.Create).Methods("POST")
 	p.HandleFunc("/people/{id:[0-9]+}", people.Show).Methods("GET")

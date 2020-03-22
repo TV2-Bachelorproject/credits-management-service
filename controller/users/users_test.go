@@ -42,11 +42,11 @@ func TestListUsers(t *testing.T) {
 		t.Errorf("expected a list containing two users; got a list of %d", len(results))
 	}
 
-	for i, result := range results {
-		if result.Name != expected[i].Name {
+	for i, e := range expected {
+		if results[i].Name != e.Name {
 			t.Errorf(
 				"expected a user with name %s; got %s",
-				expected[i].Name, result.Name,
+				e.Name, results[i].Name,
 			)
 		}
 	}

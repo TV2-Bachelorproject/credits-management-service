@@ -70,6 +70,7 @@ func Migrate(tables ...interface{}) {
 		log.Fatal("could not connect to database; if testing locally use: go test -tags local ./...")
 	}
 
+	Reset(tables...)
 	conn.AutoMigrate(tables...)
 }
 
