@@ -46,8 +46,18 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var u user.User
-	db.Where("token = ?", token).First(&u)
+	u := user.Find(claims.ID)
+
+	if u.ID == 0 {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	if u.Token != token {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
 	u.Token = refreshedToken
 	db.Save(&u)
 
