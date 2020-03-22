@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"github.com/TV2-Bachelorproject/server/model/public"
 
 	"github.com/TV2-Bachelorproject/server/model/private"
@@ -22,9 +24,11 @@ var tables = []interface{}{
 }
 
 func Migrate() {
+	time.Sleep(100 * time.Millisecond)
 	db.Migrate(tables...)
 }
 
 func Reset() {
+	time.Sleep(100 * time.Millisecond)
 	db.Reset(tables...)
 }
