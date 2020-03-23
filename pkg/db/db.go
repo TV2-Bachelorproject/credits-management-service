@@ -36,6 +36,8 @@ func init() {
 
 func Setup() error {
 	db, err := connect()
+	//Debug mode for database
+	db.LogMode(false)
 
 	if err != nil {
 		return err
