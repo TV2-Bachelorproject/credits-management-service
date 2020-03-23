@@ -33,7 +33,7 @@ type Program struct {
 
 //Find single program entry
 func (p Program) Find(id uint) Program {
-	//Preload preloads structs
+	//Preload preloads structs - Creates a SQL query pr. Preload. Should be fixed in Gorm V2.
 	if err := db.Model(p).
 		Preload("Production").
 		Preload("Category").
@@ -53,6 +53,7 @@ type Programs []Program
 
 //Find all programs
 func (p Programs) Find() Programs {
+	//Preload preloads structs - Creates a SQL query pr. Preload. Should be fixed in Gorm V2.
 	db.Model(&Program{}).
 		Preload("Production").
 		Preload("Category").
