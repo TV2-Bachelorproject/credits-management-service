@@ -29,6 +29,7 @@ type Program struct {
 	AirtimeFrom         int       `gorm:"type:bigint"`
 	AirtimeTo           int       `gorm:"type:bigint"`
 	Credit              []Credits `gorm:"many2many:credit_groups;"`
+
 }
 
 //Find single program entry
