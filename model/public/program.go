@@ -29,7 +29,6 @@ type Program struct {
 	AirtimeFrom         int       `gorm:"type:bigint"`
 	AirtimeTo           int       `gorm:"type:bigint"`
 	Credit              []Credits `gorm:"many2many:credit_groups;"`
-
 }
 
 //Find single program entry
@@ -55,12 +54,19 @@ type Programs []Program
 //Find all programs
 func (p Programs) Find() Programs {
 	//Preload preloads structs - Creates a SQL query pr. Preload. Should be fixed in Gorm V2.
-	db.Model(&Program{}).
+	errors := db.Model(&Program{}).
 		Preload("Production").
 		Preload("Category").
 		Preload("Genres").
 		Preload("Serie").
 		Preload("Season").
 		Find(&p).GetErrors()
+
+	fmt.Println(len(errors))
+
+	for _, err := range errors {
+		fmt.Println(err)
+	}
+
 	return p
 }

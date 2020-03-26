@@ -36,12 +36,10 @@ func routes(r *mux.Router) {
 	p.HandleFunc("/people/{id:[0-9]+}", people.Show).Methods("GET")
 	p.HandleFunc("/people/{id:[0-9]+}", people.Update).Methods("PUT")
 	p.HandleFunc("/people/{id:[0-9]+}", people.Delete).Methods("DELETE")
-  
-  //Routes for programs
-  pr := mux.NewRouter()
-  p.Use(middleware.Authenticated(user.Admin, user.Producer))
-	pr.HandleFunc("/programs", programs.GetAll).Methods("GET")
-	pr.HandleFunc("/programs/{id:[0-9]+}", programs.Get).Methods("GET")
+
+	//Routes for programs
+	r.HandleFunc("/programs", programs.GetAll).Methods("GET")
+	r.HandleFunc("/programs/{id:[0-9]+}", programs.Get).Methods("GET")
 
 	r.HandleFunc("/auth/login", auth.Login).Methods("POST")
 	r.HandleFunc("/auth/refresh", auth.Refresh).Methods("POST")
