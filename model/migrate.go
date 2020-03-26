@@ -26,6 +26,14 @@ var tables = []interface{}{
 func Migrate() {
 	time.Sleep(100 * time.Millisecond)
 	db.Migrate(tables...)
+
+	//Add foreignKeys for Program
+	db.Model(&public.Program{}).
+		AddForeignKey("production_id", "productions(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("season_id", "seasons(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("category_id", "categories(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("serie_id", "series(id)", "RESTRICT", "RESTRICT")
+
 }
 
 func Reset() {

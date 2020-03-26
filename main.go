@@ -6,6 +6,7 @@ import (
 
 	"github.com/TV2-Bachelorproject/server/controller/auth"
 	"github.com/TV2-Bachelorproject/server/controller/people"
+	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
@@ -15,6 +16,7 @@ import (
 )
 
 func routes(r *mux.Router) {
+
 	u := mux.NewRouter()
 	u.Use(middleware.Authenticated(user.Admin))
 	r.Handle("/users", u)
@@ -35,8 +37,13 @@ func routes(r *mux.Router) {
 	p.HandleFunc("/people/{id:[0-9]+}", people.Update).Methods("PUT")
 	p.HandleFunc("/people/{id:[0-9]+}", people.Delete).Methods("DELETE")
 
+	//Routes for programs
+	r.HandleFunc("/programs", programs.GetAll).Methods("GET")
+	r.HandleFunc("/programs/{id:[0-9]+}", programs.Get).Methods("GET")
+
 	r.HandleFunc("/auth/login", auth.Login).Methods("POST")
 	r.HandleFunc("/auth/refresh", auth.Refresh).Methods("POST")
+
 }
 
 func main() {
