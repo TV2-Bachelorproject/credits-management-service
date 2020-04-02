@@ -10,25 +10,25 @@ import (
 //Program struct
 type Program struct {
 	gorm.Model
-	ProgramID           string `json:"programId"`
-	Title               string
-	Teaser              string
-	Description         string
-	Cast                string
-	CategoryID          uint
-	Category            Category `gorm:"foreignkey:CategoryID"`
-	Genres              []Genre  `gorm:"many2many:genre_programs;"`
-	SeasonID            uint
-	Season              Season `gorm:"foreignkey:SeasonID"`
-	SeasonEpisodeNumber int
-	LinearEpisodeNumber int
-	ProductionID        uint
-	Production          Production `gorm:"foreignkey:ProductionID"`
-	SerieID             uint
-	Serie               Serie     `gorm:"foreignkey:SerieID"`
-	AirtimeFrom         int       `gorm:"type:bigint"`
-	AirtimeTo           int       `gorm:"type:bigint"`
-	Credit              []Credits `gorm:"many2many:credit_groups;"`
+	ProgramID           string     `json:"programId`
+	Title               string     `json:"title"`
+	Teaser              string     `json:"teaser"`
+	Description         string     `json:"description"`
+	Cast                string     `json:"cast"`
+	CategoryID          uint       `json:"categoryId"`
+	Category            Category   `json:"category" gorm:"foreignkey:CategoryID"`
+	Genres              []Genre    `json:"genres" gorm:"many2many:genre_programs;"`
+	SeasonID            uint       `json:"seasonId`
+	Season              Season     `json:"season" gorm:"foreignkey:SeasonID"`
+	SeasonEpisodeNumber int        `json:"seasonEpisodeNumber"`
+	LinearEpisodeNumber int        `json:"linearEpisodeNumber"`
+	ProductionID        uint       `json:"productionId"`
+	Production          Production `json:"production" gorm:"foreignkey:ProductionID"`
+	SerieID             uint       `json:"serieId"`
+	Serie               Serie      `json:"serie" gorm:"foreignkey:SerieID"`
+	AirtimeFrom         int        `json:"airTimeFrom" gorm:"type:bigint"`
+	AirtimeTo           int        `json:"airTimeTo" gorm:"type:bigint"`
+	Credit              []Credits  `json:"credit" gorm:"many2many:credit_groups;"`
 }
 
 //Find single program entry
