@@ -7,11 +7,11 @@ import (
 
 type Production struct {
 	gorm.Model
-	Country     string
-	Year        int
-	ProducedBy  string
-	ProducedFor string
-	Editor      string
+	Country     string `json:"country"`
+	Year        int    `json:"year"`
+	ProducedBy  string `json:"producedBy"`
+	ProducedFor string `json:"producedFor"`
+	Editor      string `json:"editor"`
 }
 
 func (p Production) Find(id uint) Production {
