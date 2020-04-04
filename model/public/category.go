@@ -7,7 +7,7 @@ import (
 
 type Category struct {
 	gorm.Model
-	Name string
+	Name string `json:"name"`
 }
 
 func (c Category) Find(id uint) Category {
