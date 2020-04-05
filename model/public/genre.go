@@ -7,8 +7,8 @@ import (
 
 type Genre struct {
 	gorm.Model
-	Name     string
-	Programs []Program `gorm:"many2many:genre_programs;"`
+	Name     string    `json:"name"`
+	Programs []Program `json:"programs" gorm:"many2many:genre_programs;"`
 }
 
 func (g Genre) Find(id uint) Genre {
