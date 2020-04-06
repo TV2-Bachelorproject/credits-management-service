@@ -8,9 +8,9 @@ import (
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
+	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
-	"github.com/TV2-Bachelorproject/server/model/public"
 	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/gorilla/mux"
@@ -18,63 +18,9 @@ import (
 	"github.com/graphql-go/handler"
 )
 
-// ProgramType is the GraphQL schema/typedef for the program type.
-var ProgramType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "Program",
-		Fields: graphql.Fields{
-			"id":          &graphql.Field{Type: graphql.Int},
-			"programId":   &graphql.Field{Type: graphql.String},
-			"title":       &graphql.Field{Type: graphql.String},
-			"teaser":      &graphql.Field{Type: graphql.String},
-			"description": &graphql.Field{Type: graphql.String},
-			"categoryId":  &graphql.Field{Type: graphql.Int},
-			//"category":            &graphql.Field{Type: graphql.String},
-			//"genres":              &graphql.Field{Type: graphql.String},
-			"seasonId": &graphql.Field{Type: graphql.Int},
-			//"season":              &graphql.Field{Type: graphql.String},
-			"seasonEpisodeNumber": &graphql.Field{Type: graphql.Int},
-			"linearEpisodeNumber": &graphql.Field{Type: graphql.Int},
-			"productionId":        &graphql.Field{Type: graphql.Int},
-			//"production":          &graphql.Field{Type: graphql.String},
-			"serieId": &graphql.Field{Type: graphql.Int},
-			//"serie":               &graphql.Field{Type: graphql.String},
-			"airTimeFrom": &graphql.Field{Type: graphql.Int},
-			"airTimeTo":   &graphql.Field{Type: graphql.Int},
-			//"credit":              &graphql.Field{Type: graphql.String},
-		},
-	})
-
-var queryType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "Query",
-		Fields: graphql.Fields{
-			"program": &graphql.Field{
-				Type:        ProgramType,
-				Description: "Get program by id",
-				Args: graphql.FieldConfigArgument{
-					"id": &graphql.ArgumentConfig{
-						Type: graphql.Int,
-					},
-				},
-				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					id, ok := p.Args["id"].(int)
-
-					if ok {
-						var uintID = uint(id)
-						//Find the program
-						program := public.Program{}.Find(uintID)
-						return program, nil
-					}
-					return nil, nil
-				},
-			},
-		},
-	})
-
-// Schema for graphql. TODO Add mutation
+// Schema for graphql.
 var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
-	Query: queryType,
+	Query: queries.ProgramType,
 })
 
 func routes(r *mux.Router) {

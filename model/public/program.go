@@ -2,14 +2,18 @@ package public
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/TV2-Bachelorproject/server/pkg/db"
-	"github.com/jinzhu/gorm"
+	"github.com/graphql-go/graphql"
 )
 
 //Program struct
 type Program struct {
-	gorm.Model
+	ID                  uint `json:"ID gorm:"primary_key"`
+	CreatedAt           time.Time
+	UpdatedAt           time.Time
+	DeletedAt           *time.Time `sql:"index"`
 	ProgramID           string     `json:"programId`
 	Title               string     `json:"title"`
 	Teaser              string     `json:"teaser"`
@@ -28,8 +32,36 @@ type Program struct {
 	Serie               Serie      `json:"serie" gorm:"foreignkey:SerieID"`
 	AirtimeFrom         int        `json:"airTimeFrom" gorm:"type:bigint"`
 	AirtimeTo           int        `json:"airTimeTo" gorm:"type:bigint"`
-	Credit              []Credits  `json:"credit" gorm:"many2many:credit_groups;"`
+	Credit              []Credits  `json:"credits" gorm:"many2many:credit_groups;"`
 }
+
+// ProgramType is the GraphQL schema/typedef for the program type.
+var ProgramType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Program",
+		Fields: graphql.Fields{
+			"id":                  &graphql.Field{Type: graphql.Int},
+			"programId":           &graphql.Field{Type: graphql.String},
+			"title":               &graphql.Field{Type: graphql.String},
+			"teaser":              &graphql.Field{Type: graphql.String},
+			"description":         &graphql.Field{Type: graphql.String},
+			"cast":                &graphql.Field{Type: graphql.String},
+			"categoryId":          &graphql.Field{Type: graphql.Int},
+			"category":            &graphql.Field{Type: CategoryType},
+			"genres":              &graphql.Field{Type: &graphql.List{OfType: GenresType}},
+			"seasonId":            &graphql.Field{Type: graphql.Int},
+			"season":              &graphql.Field{Type: SeasonType},
+			"seasonEpisodeNumber": &graphql.Field{Type: graphql.Int},
+			"linearEpisodeNumber": &graphql.Field{Type: graphql.Int},
+			"productionId":        &graphql.Field{Type: graphql.Int},
+			"production":          &graphql.Field{Type: ProductionType},
+			"serieId":             &graphql.Field{Type: graphql.Int},
+			"serie":               &graphql.Field{Type: SerieType},
+			"airTimeFrom":         &graphql.Field{Type: graphql.String},
+			"airTimeTo":           &graphql.Field{Type: graphql.String},
+			"credits":             &graphql.Field{Type: graphql.String},
+		},
+	})
 
 //Find single program entry
 func (p Program) Find(id uint) Program {
