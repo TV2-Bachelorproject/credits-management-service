@@ -18,10 +18,9 @@ var ProgramType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-
 			"program": &graphql.Field{
 				Type:        public.ProgramType,
-				Description: "Get program by id",
+				Description: "Get program by ID",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Type: graphql.Int,

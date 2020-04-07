@@ -2,6 +2,7 @@ package public
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/TV2-Bachelorproject/server/pkg/db"
@@ -94,10 +95,8 @@ func (p Programs) Find() Programs {
 		Preload("Season").
 		Find(&p).GetErrors()
 
-	fmt.Println(len(errors))
-
 	for _, err := range errors {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
 	return p
