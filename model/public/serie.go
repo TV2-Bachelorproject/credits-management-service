@@ -19,7 +19,6 @@ var SerieType = graphql.NewObject(
 		Fields: graphql.Fields{
 			"id":    &graphql.Field{Type: graphql.Int},
 			"title": &graphql.Field{Type: graphql.String},
-			//"seasons": &graphql.Field{Type: &graphql.List{OfType: SeasonType}}, // Don't know if this should be possible?
 		},
 	})
 
