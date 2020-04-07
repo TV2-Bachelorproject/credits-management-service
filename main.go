@@ -8,6 +8,7 @@ import (
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
+	"github.com/TV2-Bachelorproject/server/graphql/mutations"
 	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
@@ -20,7 +21,8 @@ import (
 
 // Schema for graphql.
 var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
-	Query: queries.ProgramType,
+	Query:    queries.ProgramType,
+	Mutation: mutations.UserType,
 })
 
 func routes(r *mux.Router) {
@@ -51,7 +53,7 @@ func routes(r *mux.Router) {
 	r.HandleFunc("/auth/login", auth.Login).Methods("POST")
 	r.HandleFunc("/auth/refresh", auth.Refresh).Methods("POST")
 
-	//Route for Graphql
+	//Route for Graphql TODO Needs authentication
 	startGraphql(r)
 
 }
