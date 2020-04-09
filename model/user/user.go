@@ -5,6 +5,7 @@ import (
 	"regexp"
 
 	"github.com/TV2-Bachelorproject/server/pkg/db"
+	"github.com/graphql-go/graphql"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -34,6 +35,21 @@ type User struct {
 	Type     Type
 	Token    string `json:"-"`
 }
+
+//UserType for graphql
+var UserType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "User",
+		Fields: graphql.Fields{
+			"id":       &graphql.Field{Type: graphql.Int},
+			"name":     &graphql.Field{Type: graphql.String},
+			"email":    &graphql.Field{Type: graphql.String},
+			"password": &graphql.Field{Type: graphql.String},
+			"type":     &graphql.Field{Type: graphql.Int},
+			"token":    &graphql.Field{Type: graphql.String},
+		},
+	},
+)
 
 func New(name, email, password string, t Type) (User, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)

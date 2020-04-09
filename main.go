@@ -8,15 +8,24 @@ import (
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
+	"github.com/TV2-Bachelorproject/server/graphql/mutations"
+	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
 	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/gorilla/mux"
+	"github.com/graphql-go/graphql"
+	"github.com/graphql-go/handler"
 )
 
-func routes(r *mux.Router) {
+// Schema for graphql.
+var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
+	Query:    queries.ProgramType,
+	Mutation: mutations.UserType,
+})
 
+func routes(r *mux.Router) {
 	u := mux.NewRouter()
 	u.Use(middleware.Authenticated(user.Admin))
 	r.Handle("/users", u)
@@ -44,6 +53,22 @@ func routes(r *mux.Router) {
 	r.HandleFunc("/auth/login", auth.Login).Methods("POST")
 	r.HandleFunc("/auth/refresh", auth.Refresh).Methods("POST")
 
+	//Route for Graphql TODO Needs authentication
+	startGraphql(r)
+
+}
+
+func startGraphql(r *mux.Router) {
+	//create graphql-go HTTP handler for schema
+	h := handler.New(&handler.Config{
+		Schema:     &Schema,
+		Pretty:     true, // return pretty json
+		GraphiQL:   true,
+		Playground: true,
+	})
+
+	// serve the GraphQL endpoint at "/graphql"
+	r.Handle("/graphql", h)
 }
 
 func main() {
@@ -65,7 +90,11 @@ func main() {
 	db.Create(&u2)
 
 	r := mux.NewRouter()
+
+	//setup Routes
 	routes(r)
+
+	// and serve!
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)
 	}
