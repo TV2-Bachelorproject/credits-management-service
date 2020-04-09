@@ -1,8 +1,6 @@
 package mutations
 
 import (
-	"fmt"
-
 	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/graphql-go/graphql"
@@ -21,7 +19,7 @@ var UserType = graphql.NewObject(graphql.ObjectConfig{
 	Name: "Mutation",
 	Fields: graphql.Fields{
 		"createUser": &graphql.Field{
-			Type: user.UserType,
+			Type:        user.UserType,
 			Description: "Create new User",
 			Args: graphql.FieldConfigArgument{
 				"name": &graphql.ArgumentConfig{
@@ -29,7 +27,7 @@ var UserType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"email": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.String),
-				}, 
+				},
 				"password": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.String),
 				},
@@ -37,37 +35,18 @@ var UserType = graphql.NewObject(graphql.ObjectConfig{
 					Type: graphql.NewNonNull(graphql.Int),
 				},
 			},
-			Resolve: func(params graphql.ResolveParams) (interface{}, error){
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				u := user.User{}
-				theType, ok := params.Args["type"].(int)
 
-				//if admin
-				if ok && theType == 1 {
-					//create user
-					u, _ = user.New(
-						params.Args["name"].(string), 
-						params.Args["email"].(string),
-						params.Args["password"].(string),
-						user.Producer)
-	
-					db.Create(&u)
-					return u,nil
-				}
+				//create user
+				u, _ = user.New(
+					params.Args["name"].(string),
+					params.Args["email"].(string),
+					params.Args["password"].(string),
+					user.Type(params.Args["type"].(int)))
 
-				//if producer
-				if ok && theType == 0 {
-					//create user
-					u, _ = user.New(
-						params.Args["name"].(string), 
-						params.Args["email"].(string),
-						params.Args["password"].(string),
-						user.Admin)
-	
-					db.Create(&u)
-					return u,nil
-				}
-	
-			return nil, nil
+				db.Create(&u)
+				return u, nil
 
 			},
 		},
