@@ -1,8 +1,8 @@
 package auth
 
-import jwt "github.com/dgrijalva/jwt-go"
-
-var secret = []byte("my secrect key...")
+import (
+	jwt "github.com/dgrijalva/jwt-go"
+)
 
 type Credentials struct {
 	Email, Password string

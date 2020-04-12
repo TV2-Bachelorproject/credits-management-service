@@ -5,11 +5,10 @@ import (
 
 	"github.com/TV2-Bachelorproject/server/controller/auth"
 	"github.com/TV2-Bachelorproject/server/model/user"
+	"github.com/TV2-Bachelorproject/server/pkg/config"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 )
-
-var secret = []byte("my secrect key...")
 
 func Authenticated(types ...user.Type) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
@@ -24,7 +23,7 @@ func Authenticated(types ...user.Type) mux.MiddlewareFunc {
 			claims := &auth.Claims{}
 
 			t, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-				return secret, nil
+				return []byte(config.Get().SecretKey), nil
 			})
 
 			if err != nil {

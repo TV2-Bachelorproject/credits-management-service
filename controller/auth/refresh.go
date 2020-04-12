@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/TV2-Bachelorproject/server/model/user"
+	"github.com/TV2-Bachelorproject/server/pkg/config"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	jwt "github.com/dgrijalva/jwt-go"
 )
@@ -20,7 +21,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	claims := &Claims{}
 
 	t, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return secret, nil
+		return []byte(config.Get().SecretKey), nil
 	})
 
 	if err != nil {
@@ -39,7 +40,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	claims.StandardClaims.ExpiresAt = time.Now().Add(5 * time.Minute).Unix()
-	refreshedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(secret)
+	refreshedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(config.Get().SecretKey))
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
