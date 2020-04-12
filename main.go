@@ -13,7 +13,6 @@ import (
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
 	"github.com/TV2-Bachelorproject/server/model/user"
-	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
@@ -26,6 +25,7 @@ var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
 })
 
 func routes(r *mux.Router) {
+
 	u := mux.NewRouter()
 	u.Use(middleware.Authenticated(user.Admin))
 	r.Handle("/users", u)
@@ -35,6 +35,10 @@ func routes(r *mux.Router) {
 	u.HandleFunc("/users/{id:[0-9]+}", users.Show).Methods("GET")
 	u.HandleFunc("/users/{id:[0-9]+}", users.Update).Methods("PUT")
 	u.HandleFunc("/users/{id:[0-9]+}", users.Delete).Methods("DELETE")
+
+	c := mux.NewRouter()
+	c.Use(middleware.Authenticated(user.Admin, user.Producer))
+	c.Handle("/credits", c)
 
 	p := mux.NewRouter()
 	p.Use(middleware.Authenticated(user.Admin, user.Producer))
@@ -73,21 +77,7 @@ func startGraphql(r *mux.Router) {
 
 func main() {
 	model.Migrate()
-
-	u1, err := user.New("admin", "admin@example.com", "123456", user.Admin)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	u2, err := user.New("producer", "producer@example.com", "123456", user.Producer)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db.Create(&u1)
-	db.Create(&u2)
+	model.Seed()
 
 	r := mux.NewRouter()
 
