@@ -8,10 +8,10 @@ import (
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
-	"github.com/TV2-Bachelorproject/server/graphql/mutations"
 	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
+	"github.com/TV2-Bachelorproject/server/model/private"
 	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/gorilla/mux"
@@ -21,8 +21,8 @@ import (
 
 // Schema for graphql.
 var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
-	Query:    queries.ProgramType,
-	Mutation: mutations.UserType,
+	Query: queries.ProgramType,
+	//Mutation: mutations.UserType,
 })
 
 func routes(r *mux.Router) {
@@ -67,14 +67,19 @@ func startGraphql(r *mux.Router) {
 		Playground: true,
 	})
 
+	g := mux.NewRouter()
+	g.Use(middleware.Validate)
+	g.Handle("/graphql", h)
+
 	// serve the GraphQL endpoint at "/graphql"
-	r.Handle("/graphql", h)
+	r.Handle("/graphql", g)
 }
 
 func main() {
 	model.Migrate()
 
 	u1, err := user.New("admin", "admin@example.com", "123456", user.Admin)
+	service1 := private.Service{Name: "TV2TID", Token: "TestToken"}
 
 	if err != nil {
 		log.Fatal(err)
@@ -88,6 +93,7 @@ func main() {
 
 	db.Create(&u1)
 	db.Create(&u2)
+	db.Create(&service1)
 
 	r := mux.NewRouter()
 
