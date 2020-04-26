@@ -6,21 +6,21 @@ import (
 )
 
 /*
-	Query object type with fields "program" has type ProgramType:
+	Query object type with fields "production" has type ProductionType:
        - Name: Query
        - Fields: a map of fields by using graphql.Fields
    Setup type of field, args and resolver function:
-       - Type: program
+       - Type: production
        - Args: id
        - Resolve: function to query data using params from [Args] and return value with current type
 */
-var ProgramType = graphql.NewObject(
+var ProductionType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"program": &graphql.Field{
-				Type:        public.ProgramType,
-				Description: "Get program by ID",
+			"production": &graphql.Field{
+				Type:        public.ProductionType,
+				Description: "Get production by ID",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Type: graphql.Int,
@@ -32,28 +32,28 @@ var ProgramType = graphql.NewObject(
 					if ok {
 						var uintID = uint(id)
 						//Find the program
-						program := public.Program{}.Find(uintID)
-						return program, nil
+						production := public.Production{}.Find(uintID)
+						return production, nil
 					}
 					return nil, nil
 				},
 			},
 
-			"programList": &graphql.Field{
-				Type:        graphql.NewList(public.ProgramType),
-				Description: "Get list of programs",
+			"productionList": &graphql.Field{
+				Type:        graphql.NewList(public.ProductionType),
+				Description: "Get list of productions",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					programs := public.Programs{}.Find()
-					return programs, nil
+					productions := public.Productions{}.Find()
+					return productions, nil
 				},
 			},
 		},
 	})
 
-func GetProgramQuery() *graphql.Field {
+func GetProductionQuery() *graphql.Field {
 	return &graphql.Field{
-		Type:        public.ProgramType,
-		Description: "Get program by ID",
+		Type:        public.ProductionType,
+		Description: "Get production by ID",
 		Args: graphql.FieldConfigArgument{
 			"id": &graphql.ArgumentConfig{
 				Type: graphql.Int,
@@ -65,21 +65,21 @@ func GetProgramQuery() *graphql.Field {
 			if ok {
 				var uintID = uint(id)
 				//Find the program
-				program := public.Program{}.Find(uintID)
-				return program, nil
+				production := public.Production{}.Find(uintID)
+				return production, nil
 			}
 			return nil, nil
 		},
 	}
 }
 
-func GetProgramsQuery() *graphql.Field {
+func GetProductionsQuery() *graphql.Field {
 	return &graphql.Field{
-		Type:        graphql.NewList(public.ProgramType),
-		Description: "Get list of programs",
+		Type:        graphql.NewList(public.ProductionType),
+		Description: "Get list of productions",
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			programs := public.Programs{}.Find()
-			return programs, nil
+			productions := public.Productions{}.Find()
+			return productions, nil
 		},
 	}
 }
