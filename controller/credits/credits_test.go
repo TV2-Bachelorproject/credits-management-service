@@ -86,7 +86,7 @@ func TestDelete(t *testing.T) {
 	db.Table("credit_persons").Find(&credits)
 
 	if len(credits) > 0 {
-		t.Errorf("expected o credits to exist; got %d", len(credits))
+		t.Errorf("expected 0 credits to exist; got %d", len(credits))
 	}
 }
 
