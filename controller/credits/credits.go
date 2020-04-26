@@ -9,6 +9,7 @@ import (
 )
 
 type CreateRequest struct {
+	CreditID      uint
 	ProgramID     uint
 	SeasonID      uint
 	SerieID       uint
@@ -34,9 +35,12 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		SeasonID:  data.SeasonID,
 		SerieID:   data.SerieID,
 		Persons:   people,
+		Accepted:  false,
 	}
 
-	db.Create(&credit)
+	credit.ID = data.CreditID
+
+	db.Save(&credit)
 }
 
 type DeleteRequest struct {
