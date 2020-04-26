@@ -12,9 +12,16 @@ type CreditGroup struct {
 
 type Credit struct {
 	gorm.Model
-	Persons     []Person `gorm:"many2many:person_credits;"`
-	CreditGroup CreditGroup
-	ProgramID   uint
+	Persons       []Person    `gorm:"many2many:credit_persons;"`
+	CreditGroupID uint        `json:"-"`
+	CreditGroup   CreditGroup `json:"creditGroup"`
+	ProgramID     uint        `json:"-"`
+	Program       Program     `json:"program" gorm:"foreignkey:ProgramID"`
+	SeasonID      uint        `json:"-"`
+	Season        Season      `json:"season" gorm:"foreignkey:SeasonID"`
+	SerieID       uint        `json:"-"`
+	Serie         Serie       `json:"serie" gorm:"foreignkey:SerieID"`
+	Accepted      bool        `json:"accepted"`
 }
 
 func (s Credit) Find(id uint) Credit {

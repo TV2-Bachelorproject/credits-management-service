@@ -25,7 +25,6 @@ var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
 })
 
 func routes(r *mux.Router) {
-
 	u := mux.NewRouter()
 	u.Use(middleware.Authenticated(user.Admin))
 	r.Handle("/users", u)
