@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/TV2-Bachelorproject/server/controller/auth"
+	"github.com/TV2-Bachelorproject/server/controller/credits"
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
@@ -38,6 +39,13 @@ func routes(r *mux.Router) {
 	c := mux.NewRouter()
 	c.Use(middleware.Authenticated(user.Admin, user.Producer))
 	c.Handle("/credits", c)
+	c.HandleFunc("/credits", credits.Create).Methods("POST")
+	c.HandleFunc("/credits", credits.Delete).Methods("DELETE")
+
+	ca := mux.NewRouter()
+	ca.Use(middleware.Authenticated(user.Admin))
+	ca.Handle("/credits", ca)
+	ca.HandleFunc("/credits/accept", credits.Accept).Methods("POST")
 
 	p := mux.NewRouter()
 	p.Use(middleware.Authenticated(user.Admin, user.Producer))
