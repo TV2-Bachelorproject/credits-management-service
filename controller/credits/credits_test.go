@@ -134,3 +134,21 @@ func TestAccept(t *testing.T) {
 		}
 	}
 }
+
+func TestGroups(t *testing.T) {
+	model.Migrate()
+	model.Seed()
+	defer model.Reset()
+
+	r := httptest.NewRequest("PUT", "/credit/groups", nil)
+	w := httptest.NewRecorder()
+
+	Groups(w, r)
+
+	var groups []public.CreditGroup
+	json.Unmarshal(w.Body.Bytes(), &groups)
+
+	if len(groups) != 12 {
+		t.Errorf("expected a list of length %d; got %d", 12, len(groups))
+	}
+}

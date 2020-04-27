@@ -40,6 +40,7 @@ func routes(r *mux.Router) {
 	c.Handle("/credits", c)
 	c.HandleFunc("/credits", credits.Create).Methods("POST")
 	c.HandleFunc("/credits", credits.Delete).Methods("DELETE")
+	c.HandleFunc("/credits/groups", credits.Groups).Methods("GET")
 
 	ca := mux.NewRouter()
 	ca.Use(middleware.Authenticated(user.Admin))

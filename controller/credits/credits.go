@@ -6,6 +6,7 @@ import (
 
 	"github.com/TV2-Bachelorproject/server/model/public"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
+	"github.com/TV2-Bachelorproject/server/pkg/response"
 )
 
 type CreateRequest struct {
@@ -82,4 +83,10 @@ func Accept(w http.ResponseWriter, r *http.Request) {
 		credit.Accepted = true
 		db.Save(&credit)
 	}
+}
+
+func Groups(w http.ResponseWriter, r *http.Request) {
+	var groups []public.CreditGroup
+	db.Model(public.CreditGroup{}).Find(&groups)
+	response.JSON(w, groups)
 }
