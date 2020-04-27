@@ -12,7 +12,6 @@ import (
 	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
-	"github.com/TV2-Bachelorproject/server/model/private"
 	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
