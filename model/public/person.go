@@ -7,7 +7,7 @@ import (
 
 type Person struct {
 	gorm.Model
-	Name    string
+	Name    string   `json:"name"`
 	Credits []Credit `gorm:"many2many:person_credits;"`
 }
 

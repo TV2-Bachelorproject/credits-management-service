@@ -24,6 +24,7 @@ var (
 	Limit         func(interface{}) *gorm.DB
 	Offset        func(interface{}) *gorm.DB
 	Not           func(interface{}, ...interface{}) *gorm.DB
+	Exec          func(string, ...interface{}) *gorm.DB
 	FirstOrInit   func(interface{}, ...interface{}) *gorm.DB
 	FirstOrCreate func(interface{}, ...interface{}) *gorm.DB
 	Set           func(string, interface{}) *gorm.DB
@@ -59,6 +60,7 @@ func Setup() error {
 	Limit = db.Limit
 	Offset = db.Offset
 	Not = db.Not
+	Exec = db.Exec
 	FirstOrInit = db.FirstOrInit
 	FirstOrCreate = db.FirstOrCreate
 	Set = db.Set

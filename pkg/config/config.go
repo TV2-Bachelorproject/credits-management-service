@@ -11,7 +11,8 @@ type DB struct {
 }
 
 type Config struct {
-	DB DB
+	SecretKey string `envconfig:"SECRET_KEY" default:"this is a very secret key..."`
+	DB        DB
 }
 
 var config Config

@@ -5,15 +5,14 @@ import (
 	"net/http"
 
 	"github.com/TV2-Bachelorproject/server/controller/auth"
+	"github.com/TV2-Bachelorproject/server/controller/credits"
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
 	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
-	"github.com/TV2-Bachelorproject/server/model/private"
 	"github.com/TV2-Bachelorproject/server/model/user"
-	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
@@ -35,6 +34,18 @@ func routes(r *mux.Router) {
 	u.HandleFunc("/users/{id:[0-9]+}", users.Show).Methods("GET")
 	u.HandleFunc("/users/{id:[0-9]+}", users.Update).Methods("PUT")
 	u.HandleFunc("/users/{id:[0-9]+}", users.Delete).Methods("DELETE")
+
+	c := mux.NewRouter()
+	c.Use(middleware.Authenticated(user.Admin, user.Producer))
+	c.Handle("/credits", c)
+	c.HandleFunc("/credits", credits.Create).Methods("POST")
+	c.HandleFunc("/credits", credits.Delete).Methods("DELETE")
+	c.HandleFunc("/credits/groups", credits.Groups).Methods("GET")
+
+	ca := mux.NewRouter()
+	ca.Use(middleware.Authenticated(user.Admin))
+	ca.Handle("/credits", ca)
+	ca.HandleFunc("/credits/accept", credits.Accept).Methods("POST")
 
 	p := mux.NewRouter()
 	p.Use(middleware.Authenticated(user.Admin, user.Producer))
@@ -77,23 +88,7 @@ func startGraphql(r *mux.Router) {
 
 func main() {
 	model.Migrate()
-
-	u1, err := user.New("admin", "admin@example.com", "123456", user.Admin)
-	service1 := private.Service{Name: "TV2TID", Token: "TestToken"}
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	u2, err := user.New("producer", "producer@example.com", "123456", user.Producer)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db.Create(&u1)
-	db.Create(&u2)
-	db.Create(&service1)
+	model.Seed()
 
 	r := mux.NewRouter()
 
