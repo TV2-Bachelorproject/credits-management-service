@@ -82,7 +82,7 @@ func (p Person) Invalid() ValidationError {
 
 type People []Person
 
-func (s People) Find() People {
-	db.Model(&Person{}).Find(&s)
-	return s
+func (p People) Find() People {
+	db.Model(&Person{}).Find(&p)
+	return p
 }

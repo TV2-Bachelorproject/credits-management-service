@@ -9,10 +9,10 @@ import (
 	"github.com/TV2-Bachelorproject/server/controller/people"
 	"github.com/TV2-Bachelorproject/server/controller/programs"
 	"github.com/TV2-Bachelorproject/server/controller/users"
-	"github.com/TV2-Bachelorproject/server/graphql/mutations"
 	"github.com/TV2-Bachelorproject/server/graphql/queries"
 	"github.com/TV2-Bachelorproject/server/middleware"
 	"github.com/TV2-Bachelorproject/server/model"
+	"github.com/TV2-Bachelorproject/server/model/private"
 	"github.com/TV2-Bachelorproject/server/model/user"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
@@ -21,8 +21,8 @@ import (
 
 // Schema for graphql.
 var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
-	Query:    queries.ProgramType,
-	Mutation: mutations.UserType,
+	Query: queries.ProgramType,
+	//Mutation: mutations.UserType,
 })
 
 func routes(r *mux.Router) {
@@ -78,8 +78,12 @@ func startGraphql(r *mux.Router) {
 		Playground: true,
 	})
 
+	g := mux.NewRouter()
+	g.Use(middleware.Validate)
+	g.Handle("/graphql", h)
+
 	// serve the GraphQL endpoint at "/graphql"
-	r.Handle("/graphql", h)
+	r.Handle("/graphql", g)
 }
 
 func main() {
