@@ -12,6 +12,7 @@ import (
 
 var tables = []interface{}{
 	&private.Person{},
+	&private.Service{},
 	&public.Category{},
 	&public.Genre{},
 	&public.Credit{},

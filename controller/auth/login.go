@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/TV2-Bachelorproject/server/model/user"
+	"github.com/TV2-Bachelorproject/server/pkg/config"
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	jwt "github.com/dgrijalva/jwt-go"
 )
@@ -34,7 +35,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(secret)
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(config.Get().SecretKey))
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
