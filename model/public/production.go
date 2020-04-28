@@ -1,18 +1,22 @@
 package public
 
 import (
+	"time"
+
 	"github.com/TV2-Bachelorproject/server/pkg/db"
 	"github.com/graphql-go/graphql"
-	"github.com/jinzhu/gorm"
 )
 
 type Production struct {
-	gorm.Model
-	Country     string `json:"country"`
-	Year        int    `json:"year"`
-	ProducedBy  string `json:"producedBy"`
-	ProducedFor string `json:"producedFor"`
-	Editor      string `json:"editor"`
+	ID          uint `gorm:"primary_key"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   *time.Time `sql:"index"`
+	Country     string     `json:"country"`
+	Year        int        `json:"year"`
+	ProducedBy  string     `json:"producedBy"`
+	ProducedFor string     `json:"producedFor"`
+	Editor      string     `json:"editor"`
 }
 
 //ProductionType - object type with fields: id, country, year, producedBy, producedFor, editor

@@ -18,11 +18,6 @@ import (
 	"github.com/graphql-go/handler"
 )
 
-// Schema for graphql.
-var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
-	Query: queries.ProgramType,
-	//Mutation: mutations.UserType,
-})
 
 func routes(r *mux.Router) {
 	u := mux.NewRouter()
@@ -69,7 +64,28 @@ func routes(r *mux.Router) {
 
 }
 
+func CorsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST,OPTIONS")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
 func startGraphql(r *mux.Router) {
+	// Schema for graphql.
+	var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
+		Query: graphql.NewObject(graphql.ObjectConfig{
+			Name:   "RootQuery",
+			Fields: queries.GetRootFields(),
+		}),
+		Mutation: mutations.UserType,
+	})
+
 	//create graphql-go HTTP handler for schema
 	h := handler.New(&handler.Config{
 		Schema:     &Schema,
@@ -96,7 +112,7 @@ func main() {
 	routes(r)
 
 	// and serve!
-	if err := http.ListenAndServe(":3000", r); err != nil {
+	if err := http.ListenAndServe(":3000", CorsMiddleware(r)); err != nil {
 		log.Fatal(err)
 	}
 }
