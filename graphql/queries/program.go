@@ -1,6 +1,8 @@
 package queries
 
 import (
+	"errors"
+
 	"github.com/TV2-Bachelorproject/server/model/public"
 	"github.com/graphql-go/graphql"
 )
@@ -66,9 +68,10 @@ func GetProgramQuery() *graphql.Field {
 				var uintID = uint(id)
 				//Find the program
 				program := public.Program{}.Find(uintID)
-				return program, nil
+
+				return program, errors.New("Program not found!")
 			}
-			return nil, nil
+			return nil, errors.New("Program not found!")
 		},
 	}
 }

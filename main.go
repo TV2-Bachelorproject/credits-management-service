@@ -83,7 +83,7 @@ func startGraphql(r *mux.Router) {
 	})
 
 	// serve the GraphQL endpoint at "/graphql"
-	r.Handle("/graphql", CorsMiddleware(h))
+	r.Handle("/graphql", h)
 }
 
 func main() {
