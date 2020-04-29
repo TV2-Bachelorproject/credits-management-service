@@ -18,7 +18,6 @@ import (
 	"github.com/graphql-go/handler"
 )
 
-
 func routes(r *mux.Router) {
 	u := mux.NewRouter()
 	u.Use(middleware.Authenticated(user.Admin))
@@ -32,14 +31,15 @@ func routes(r *mux.Router) {
 
 	c := mux.NewRouter()
 	c.Use(middleware.Authenticated(user.Admin, user.Producer))
-	c.Handle("/credits", c)
+	r.Handle("/credits", c)
+	r.Handle("/credits/groups", c)
 	c.HandleFunc("/credits", credits.Create).Methods("POST")
 	c.HandleFunc("/credits", credits.Delete).Methods("DELETE")
 	c.HandleFunc("/credits/groups", credits.Groups).Methods("GET")
 
 	ca := mux.NewRouter()
 	ca.Use(middleware.Authenticated(user.Admin))
-	ca.Handle("/credits", ca)
+	r.Handle("/credits/accept", ca)
 	ca.HandleFunc("/credits/accept", credits.Accept).Methods("POST")
 
 	p := mux.NewRouter()
@@ -83,7 +83,6 @@ func startGraphql(r *mux.Router) {
 			Name:   "RootQuery",
 			Fields: queries.GetRootFields(),
 		}),
-		Mutation: mutations.UserType,
 	})
 
 	//create graphql-go HTTP handler for schema
