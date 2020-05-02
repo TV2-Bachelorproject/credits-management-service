@@ -18,6 +18,11 @@ type CreateRequest struct {
 	Persons       []uint
 }
 
+func GetAll(w http.ResponseWriter, r *http.Request) {
+	credits := public.Credits{}.Find()
+	response.JSON(w, credits)
+}
+
 func Create(w http.ResponseWriter, r *http.Request) {
 	var data CreateRequest
 
@@ -32,11 +37,12 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	db.Model(&public.Person{}).Where("id IN (?)", data.Persons).Find(&people)
 
 	credit := public.Credit{
-		ProgramID: data.ProgramID,
-		SeasonID:  data.SeasonID,
-		SerieID:   data.SerieID,
-		Persons:   people,
-		Accepted:  false,
+		ProgramID:     data.ProgramID,
+		CreditGroupID: data.CreditGroupID,
+		SeasonID:      data.SeasonID,
+		SerieID:       data.SerieID,
+		Persons:       people,
+		Accepted:      false,
 	}
 
 	credit.ID = data.CreditID

@@ -81,7 +81,13 @@ func GetProgramsQuery() *graphql.Field {
 		Type:        graphql.NewList(public.ProgramType),
 		Description: "Get list of programs",
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+
 			programs := public.Programs{}.Find()
+
+			for _, program := range programs {
+				program.Credits = public.Credits{}.ForProgram(program.ID)
+			}
+
 			return programs, nil
 		},
 	}
