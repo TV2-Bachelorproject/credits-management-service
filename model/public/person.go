@@ -13,6 +13,7 @@ type Person struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`
 	Name      string     `json:"name"`
+	Credits   []Credit   `json:"credits" gorm:"many2many:credit_persons;"`
 }
 
 //PersonType - object type with fields: TODO
