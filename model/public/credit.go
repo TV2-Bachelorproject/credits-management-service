@@ -20,7 +20,7 @@ type Credit struct {
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 	DeletedAt     *time.Time  `sql:"index"`
-	Persons       []Person    `gorm:"many2many:credit_persons;"`
+	Persons       []Person    `json:"persons" gorm:"many2many:credit_persons;"`
 	CreditGroupID uint        `json:"-"`
 	CreditGroup   CreditGroup `json:"creditGroup" gorm:"foreignkey:CreditGroupID;"`
 	ProgramID     uint        `json:"-"`
@@ -60,10 +60,4 @@ type Credits []Credit
 func (s Credits) Find() Credits {
 	db.Model(&Credit{}).Find(&s)
 	return s
-}
-
-func (c Credits) ForProgram(id uint) Credits {
-	db.Model(&Credit{}).Where("program_id = ?", id).Preload("Persons").Preload("CreditGroup").
-		Find(&c)
-	return c
 }
