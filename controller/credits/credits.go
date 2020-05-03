@@ -38,8 +38,8 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 	credit := public.Credit{
 		ProgramID:     data.ProgramID,
-		CreditGroupID: data.CreditGroupID,
 		SeasonID:      data.SeasonID,
+		CreditGroupID: data.CreditGroupID,
 		SerieID:       data.SerieID,
 		Persons:       people,
 		Accepted:      false,

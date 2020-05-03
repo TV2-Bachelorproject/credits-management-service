@@ -6,8 +6,8 @@ import (
 )
 
 func TestCredit(t *testing.T) {
-	credits := Credits{}.ForProgram(25)
+	programs := Programs{}.Find()
 
-	fmt.Println(credits[0].CreditGroup)
+	fmt.Println(programs)
 
 }
