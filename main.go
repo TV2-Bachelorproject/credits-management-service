@@ -30,7 +30,7 @@ func routes(r *mux.Router) {
 	u.HandleFunc("/users/{id:[0-9]+}", users.Delete).Methods("DELETE")
 
 	c := mux.NewRouter()
-	//c.Use(middleware.Authenticated(user.Admin, user.Producer))
+	c.Use(middleware.Authenticated(user.Admin, user.Producer))
 	r.Handle("/credits", c)
 	r.Handle("/credits/groups", c)
 	c.HandleFunc("/credits", credits.GetAll).Methods("GET")
@@ -44,7 +44,7 @@ func routes(r *mux.Router) {
 	ca.HandleFunc("/credits/accept", credits.Accept).Methods("POST")
 
 	p := mux.NewRouter()
-	//p.Use(middleware.Authenticated(user.Admin, user.Producer))
+	p.Use(middleware.Authenticated(user.Admin, user.Producer))
 	r.Handle("/people", p)
 	r.Handle("/people/{id:[0-9]+}", p)
 	p.HandleFunc("/people", people.List).Methods("GET")
@@ -95,7 +95,7 @@ func startGraphql(r *mux.Router) {
 	})
 
 	g := mux.NewRouter()
-	//g.Use(middleware.Validate)
+	g.Use(middleware.Validate)
 	g.Handle("/graphql", h)
 
 	// serve the GraphQL endpoint at "/graphql"
