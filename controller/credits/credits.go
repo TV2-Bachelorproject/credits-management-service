@@ -18,11 +18,6 @@ type CreateRequest struct {
 	Persons       []uint
 }
 
-func GetAll(w http.ResponseWriter, r *http.Request) {
-	credits := public.Credits{}.Find()
-	response.JSON(w, credits)
-}
-
 func Create(w http.ResponseWriter, r *http.Request) {
 	var data CreateRequest
 
