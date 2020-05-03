@@ -11,7 +11,7 @@ import (
 
 //Program struct
 type Program struct {
-	ID                  uint `json:"ID gorm:"primary_key"`
+	ID                  uint `gorm:"primary_key"`
 	CreatedAt           time.Time
 	UpdatedAt           time.Time
 	DeletedAt           *time.Time `sql:"index"`
@@ -33,7 +33,7 @@ type Program struct {
 	Serie               Serie      `json:"serie" gorm:"foreignkey:SerieID"`
 	AirtimeFrom         int        `json:"airTimeFrom" gorm:"type:bigint"`
 	AirtimeTo           int        `json:"airTimeTo" gorm:"type:bigint"`
-	Credit              []Credits  `json:"credits" gorm:"many2many:credit_groups;"`
+	Credits             []Credit   `json:"credits"`
 }
 
 // ProgramType is the GraphQL schema/typedef for the program type.
@@ -60,7 +60,7 @@ var ProgramType = graphql.NewObject(
 			"serie":               &graphql.Field{Type: SerieType},
 			"airTimeFrom":         &graphql.Field{Type: graphql.String},
 			"airTimeTo":           &graphql.Field{Type: graphql.String},
-			"credits":             &graphql.Field{Type: graphql.String},
+			"credits":             &graphql.Field{Type: &graphql.List{OfType: CreditType}},
 		},
 	})
 
@@ -73,7 +73,9 @@ func (p Program) Find(id uint) Program {
 		Preload("Genres").
 		Preload("Serie").
 		Preload("Season").
-		Preload("Credit").
+		Preload("Credits").
+		Preload("Credits.Persons").
+		Preload("Credits.CreditGroup").
 		Where("id = ?", id).
 		First(&p).Error; err != nil {
 		fmt.Println(err)
@@ -93,6 +95,9 @@ func (p Programs) Find() Programs {
 		Preload("Genres").
 		Preload("Serie").
 		Preload("Season").
+		Preload("Credits").
+		Preload("Credits.Persons").
+		Preload("Credits.CreditGroup").
 		Find(&p).GetErrors()
 
 	for _, err := range errors {

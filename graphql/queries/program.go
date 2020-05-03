@@ -69,9 +69,9 @@ func GetProgramQuery() *graphql.Field {
 				//Find the program
 				program := public.Program{}.Find(uintID)
 
-				return program, errors.New("Program not found!")
+				return program, nil
 			}
-			return nil, errors.New("Program not found!")
+			return nil, errors.New("program not found")
 		},
 	}
 }
@@ -81,7 +81,9 @@ func GetProgramsQuery() *graphql.Field {
 		Type:        graphql.NewList(public.ProgramType),
 		Description: "Get list of programs",
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+
 			programs := public.Programs{}.Find()
+
 			return programs, nil
 		},
 	}

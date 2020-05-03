@@ -1,15 +1,30 @@
 package public
 
 import (
+	"time"
+
 	"github.com/TV2-Bachelorproject/server/pkg/db"
-	"github.com/jinzhu/gorm"
+	"github.com/graphql-go/graphql"
 )
 
 type Person struct {
-	gorm.Model
-	Name    string   `json:"name"`
-	Credits []Credit `gorm:"many2many:person_credits;"`
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
+	Name      string     `json:"name"`
+	Credits   []Credit   `json:"credits" gorm:"many2many:credit_persons;"`
 }
+
+//PersonType - object type with fields: TODO
+var PersonType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Person",
+		Fields: graphql.Fields{
+			"id":   &graphql.Field{Type: graphql.Int},
+			"name": &graphql.Field{Type: graphql.String},
+		},
+	})
 
 func (p Person) Find(id uint) Person {
 	db.Model(p).Where("id = ?", id).First(&p)

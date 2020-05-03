@@ -32,11 +32,12 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	db.Model(&public.Person{}).Where("id IN (?)", data.Persons).Find(&people)
 
 	credit := public.Credit{
-		ProgramID: data.ProgramID,
-		SeasonID:  data.SeasonID,
-		SerieID:   data.SerieID,
-		Persons:   people,
-		Accepted:  false,
+		ProgramID:     data.ProgramID,
+		SeasonID:      data.SeasonID,
+		CreditGroupID: data.CreditGroupID,
+		SerieID:       data.SerieID,
+		Persons:       people,
+		Accepted:      false,
 	}
 
 	credit.ID = data.CreditID

@@ -1,28 +1,54 @@
 package public
 
 import (
+	"time"
+
 	"github.com/TV2-Bachelorproject/server/pkg/db"
-	"github.com/jinzhu/gorm"
+	"github.com/graphql-go/graphql"
 )
 
 type CreditGroup struct {
-	gorm.Model
-	Name string
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
+	Name      string
 }
 
 type Credit struct {
-	gorm.Model
-	Persons       []Person    `gorm:"many2many:credit_persons;"`
+	ID            uint `gorm:"primary_key"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     *time.Time  `sql:"index"`
+	Persons       []Person    `json:"persons" gorm:"many2many:credit_persons;"`
 	CreditGroupID uint        `json:"-"`
-	CreditGroup   CreditGroup `json:"creditGroup"`
+	CreditGroup   CreditGroup `json:"creditGroup" gorm:"foreignkey:CreditGroupID;"`
 	ProgramID     uint        `json:"-"`
-	Program       Program     `json:"program" gorm:"foreignkey:ProgramID"`
 	SeasonID      uint        `json:"-"`
-	Season        Season      `json:"season" gorm:"foreignkey:SeasonID"`
 	SerieID       uint        `json:"-"`
-	Serie         Serie       `json:"serie" gorm:"foreignkey:SerieID"`
 	Accepted      bool        `json:"accepted"`
 }
+
+var CreditGroupType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "CreditGroup",
+		Fields: graphql.Fields{
+			"id":   &graphql.Field{Type: graphql.Int},
+			"name": &graphql.Field{Type: graphql.String},
+		},
+	})
+
+//CreditType - object type with fields: id, title, rawSeasonID,serieId,serie
+var CreditType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Credit",
+		Fields: graphql.Fields{
+			"id":          &graphql.Field{Type: graphql.Int},
+			"persons":     &graphql.Field{Type: &graphql.List{OfType: PersonType}},
+			"creditGroup": &graphql.Field{Type: CreditGroupType},
+			"accepted":    &graphql.Field{Type: graphql.Boolean},
+		},
+	})
 
 func (s Credit) Find(id uint) Credit {
 	db.Model(s).Where("id = ?", id).First(&s)
