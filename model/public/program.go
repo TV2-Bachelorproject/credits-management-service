@@ -74,6 +74,8 @@ func (p Program) Find(id uint) Program {
 		Preload("Serie").
 		Preload("Season").
 		Preload("Credits").
+		Preload("Credits.Persons").
+		Preload("Credits.CreditGroup").
 		Where("id = ?", id).
 		First(&p).Error; err != nil {
 		fmt.Println(err)
@@ -94,6 +96,8 @@ func (p Programs) Find() Programs {
 		Preload("Serie").
 		Preload("Season").
 		Preload("Credits").
+		Preload("Credits.Persons").
+		Preload("Credits.CreditGroup").
 		Find(&p).GetErrors()
 
 	for _, err := range errors {
