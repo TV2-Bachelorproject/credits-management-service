@@ -1,3 +1,5 @@
+package credits
+
 import (
 	"bytes"
 	"encoding/json"
