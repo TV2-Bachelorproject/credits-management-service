@@ -31,16 +31,21 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	var people public.People
 	db.Model(&public.Person{}).Where("id IN (?)", data.Persons).Find(&people)
 
-	credit := public.Credit{
-		ProgramID:     data.ProgramID,
-		SeasonID:      data.SeasonID,
-		CreditGroupID: data.CreditGroupID,
-		SerieID:       data.SerieID,
-		Persons:       people,
-		Accepted:      false,
-	}
+	var credit public.Credit
+	db.Model(&public.Credit{}).Where(
+		"credit_group_id = ? AND program_id = ? AND season_id = ? AND serie_id = ?",
+		data.CreditGroupID,
+		data.ProgramID,
+		data.SeasonID,
+		data.SerieID,
+	).First(&credit)
 
-	credit.ID = data.CreditID
+	credit.ProgramID = data.ProgramID
+	credit.SeasonID = data.SeasonID
+	credit.SerieID = data.SerieID
+	credit.CreditGroupID = data.CreditGroupID
+	credit.Persons = []public.Person(people)
+	credit.Accepted = false
 
 	db.Save(&credit)
 }
