@@ -19,7 +19,7 @@ func TestValidate(t *testing.T) {
 	db.Create(&service1)
 
 	r := httptest.NewRequest("GET", "/", nil)
-	r.Header.Add("token", "TestToken")
+	r.Header.Add("service-token", "TestToken")
 	w := httptest.NewRecorder()
 
 	Validate(success{}).ServeHTTP(w, r)

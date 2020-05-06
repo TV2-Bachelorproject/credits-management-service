@@ -9,6 +9,7 @@ type Credentials struct {
 }
 
 type Claims struct {
-	ID uint
+	ID    uint
+	Admin bool
 	jwt.StandardClaims
 }
