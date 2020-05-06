@@ -39,7 +39,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	claims.StandardClaims.ExpiresAt = time.Now().Add(5 * time.Minute).Unix()
+	claims.StandardClaims.ExpiresAt = time.Now().Add(60 * time.Minute).Unix()
 	refreshedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(config.Get().SecretKey))
 
 	if err != nil {

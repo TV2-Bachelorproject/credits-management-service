@@ -31,7 +31,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	claims := &Claims{
 		ID: u.ID,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(5 * time.Minute).Unix(),
+			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
 		},
 	}
 

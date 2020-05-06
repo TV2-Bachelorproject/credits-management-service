@@ -66,6 +66,13 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db.Exec("DELETE FROM credit_persons WHERE credit_id = ? AND person_id = ?", data.CreditID, data.PersonID)
+
+	var count int
+	db.Table("credit_persons").Where("credit_id = ?", data.CreditID).Count(&count)
+
+	if count == 0 {
+		db.Exec("DELETE FROM credits WHERE id = ?", data.CreditID)
+	}
 }
 
 type AcceptRequest struct {
